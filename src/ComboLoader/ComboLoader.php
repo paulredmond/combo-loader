@@ -3,41 +3,24 @@
 namespace ComboLoader;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Assetic\Asset\AssetCollection;
+use Assetic\Asset\FileAsset;
 
 class ComboLoader
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var ComboHandler
      */
-    private $request;
+    private $handler;
 
-    private $modules = array();
-
-    public static function createFromArray(array $modules = array())
+    public function __construct(ComboHandler $handler)
     {
-        $class = new static();
-
-        foreach ($modules as $module) {
-            $class->addModule($module);
-        }
-
-        return $class;
+        $this->handler = $handler;
     }
 
     public function handle()
     {
-        throw new \ComboLoader\Exception\AccessDeniedException('?' . implode('&', $this->getModules()));
-    }
-
-    public function getModules()
-    {
-        return $this->modules;
-    }
-
-    public function addModule($module)
-    {
-        $this->modules[] = $module;
-
-        return $this;
+        return new Response($this->handler->dump());
     }
 }
