@@ -1,0 +1,17 @@
+{
+    "name": "redmonster/combo-loader",
+    "description": "Combo loading server for javascript and css assets.",
+    "authors": [
+        {
+            "name": "Paul Redmond",
+            "email": "paulrredmond@gmail.com"
+        }
+    ],
+    "require": {
+        "silex/silex": "1.0.x-dev",
+        "kriswallsmith/assetic": "v1.0.4"
+    },
+    "autoload": {
+        "psr-0": { "ComboLoader": "src/" }
+    }
+}
