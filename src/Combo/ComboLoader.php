@@ -15,6 +15,13 @@ class ComboLoader
     private $collection;
 
     /**
+     * Copy of the dumped content.
+     *
+     * @var String
+     */
+    private $content;
+
+    /**
      * Detected file extension.
      *
      * Extension will be used to determine the Content-Type of the response.
@@ -55,7 +62,11 @@ class ComboLoader
 
     public function dump()
     {
-        return $this->collection->dump();
+        if (!isset($this->content)) {
+            $this->content = $this->collection->dump();
+        }
+
+        return $this->content;
     }
 
     public function addModule($module)
@@ -109,7 +120,7 @@ class ComboLoader
      */
     private function isSubDir($module)
     {
-        $base = $this->basedir;
+        $base = realpath($this->basedir);
         $dir  = dirname($base . '/' . $module);
         $real = substr(realpath($dir), 0, strlen($base));
 
