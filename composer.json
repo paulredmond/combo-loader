@@ -12,6 +12,6 @@
         "kriswallsmith/assetic": "v1.0.4"
     },
     "autoload": {
-        "psr-0": { "ComboLoader": "src/" }
+        "psr-0": { "Combo": "src/" }
     }
 }

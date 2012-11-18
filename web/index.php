@@ -4,26 +4,32 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use ComboLoader\ComboLoader;
-use ComboLoader\ComboHandler;
+use Combo\ComboLoader;
+use Combo\ComboHandler;
 
 $app = new Silex\Application();
-$app['debug'] = true;
-
-// @todo add a proper service later
+$app['debug'] = false;
 $app['combo.basedir'] = __DIR__ . "/assets";
 
 $app->get('/combo', function () use ($app) {
-    $comboLoader = new ComboLoader(new ComboHandler(
+    $handler = new ComboHandler(new ComboLoader(
         $app['combo.basedir'],
         explode('&', $app['request']->server->get('QUERY_STRING'))
     ));
 
-    return $comboLoader->handle();
+    return $handler->respond();
 });
 
-//$app->error(function (\ComboLoader\Exception\AccessDeniedException $e) {
-//    return new Response($e->getMessage(), 403);
-//});
+$app->error(function (\Combo\Exception\Exception $e) {
+    $response = new Response(sprintf('/* %s */', $e->getMessage()), 403);
+    $response->headers->set('Content-Type', $e->loader->getContentType());
+
+    return $response;
+});
+
+$app->error(function (\InvalidArgumentException $e) {
+    $response = new Response(sprintf('/* %s */', $e->getMessage()), 403);
+
+});
 
 $app->run();
