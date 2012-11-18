@@ -8,8 +8,8 @@ use Combo\ComboLoader;
 use Combo\ComboHandler;
 
 $app = new Silex\Application();
-$app['debug'] = false;
-$app['combo.basedir'] = __DIR__ . "/assets";
+
+require_once __DIR__ . "/../app/config/config.php";
 
 $app->get('/combo', function () use ($app) {
     $handler = new ComboHandler(new ComboLoader(
@@ -32,4 +32,10 @@ $app->error(function (\InvalidArgumentException $e) {
 
 });
 
-$app->run();
+Request::trustProxyData();
+
+if ($app['http_cache']) {
+    $app['http_cache']->run();
+} else {
+    $app->run();
+}
