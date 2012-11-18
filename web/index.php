@@ -34,8 +34,8 @@ $app->error(function (\InvalidArgumentException $e) {
 
 Request::trustProxyData();
 
-if ($app['http_cache']) {
-    $app['http_cache']->run();
-} else {
+if ($app['debug'] === true || !isset($app['http_cache'])) {
     $app->run();
+} else {
+    $app['http_cache']->run();
 }

@@ -1,10 +1,10 @@
 <?php
 
-$app['debug'] = true;
+$app['debug'] = false;
 
 // Combo configuration
 $app['combo.basedir']  = __DIR__ . "/../../web/assets";
-$app['combo.maxage']   = 315360000; // 1 Year
+$app['combo.maxage']   = 31536000; // 1 Year
 
 // Http Cache
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
@@ -17,5 +17,8 @@ $app->after(function ($request, $response) use ($app) {
             'public' => true,
             'max_age' => $app['combo.maxage'],
         ));
+
+        $response->headers->set('Expires', date('r', strtotime(sprintf("+%s seconds", $app['combo.maxage']))));
+
     }
 });
