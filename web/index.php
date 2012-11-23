@@ -14,7 +14,10 @@ require_once __DIR__ . "/../app/config/config.php";
 $app->get('/combo', function () use ($app) {
     $handler = new ComboHandler(new ComboLoader(
         $app['combo.basedir'],
-        explode('&', $app['request']->server->get('QUERY_STRING'))
+        explode('&', $app['request']->server->get('QUERY_STRING')),
+        $app['combo.cache.path'],
+        $app['combo.cache.asset_lifetime'],
+        $app['debug']
     ));
 
     return $handler->respond();

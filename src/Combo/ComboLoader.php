@@ -47,7 +47,14 @@ class ComboLoader
 
     private $cachePath = false;
 
-    public function __construct($basedir, array $modules = array(), $cachePath, $debug = false)
+    /**
+     * Amount of time in seconds an asset will be cached.
+     *
+     * @var int
+     */
+    private $expires = 0;
+
+    public function __construct($basedir, array $modules = array(), $cachePath, $expires = 0, $debug = false)
     {
         if (!is_dir($basedir)) {
             throw new \LogicException(sprintf('The ComboLoader basedir "%s" does not exist.', $basedir));
@@ -55,6 +62,7 @@ class ComboLoader
 
         $this->debug       = $debug;
         $this->cachePath   = $cachePath;
+        $this->expires     = $expires;
         $this->basedir     = $basedir;
         $this->collection  = new AssetCollection();
 
@@ -119,16 +127,16 @@ class ComboLoader
         return $this->contentTypes[$this->extension];
     }
 
-    private function createFileAsset($path, array $filters = array())
+    private function createFileAsset($path)
     {
-        $asset = new FileAsset($path, $filters);
+        $asset = new FileAsset($path);
         if ($this->debug === true) {
             return $asset;
         }
 
         return new AssetCache(
             $asset,
-            new ExpiringCache(new FileSystemCache($this->cachePath), 60 * 60 * 24)
+            new ExpiringCache(new FileSystemCache($this->cachePath), $this->expires)
         );
     }
 
