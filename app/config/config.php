@@ -5,7 +5,7 @@ $app['debug'] = false;
 // Combo configuration
 $app['combo.basedir']  = __DIR__ . "/../../web/assets";
 $app['combo.maxage']   = 31536000; // 1 Year
-
+$app['combo.cache_path']    = __DIR__ . "/../cache/assetic";
 // Http Cache
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => __DIR__.'/../cache/http',

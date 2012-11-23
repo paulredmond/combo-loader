@@ -6,6 +6,9 @@ use Combo\Exception;
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
+use Assetic\Asset\AssetCache;
+use Assetic\Cache\FilesystemCache;
+use Assetic\Cache\ExpiringCache;
 
 class ComboLoader
 {
@@ -40,14 +43,20 @@ class ComboLoader
         'css'  => 'text/css'
     );
 
-    public function __construct($basedir, array $modules = array())
+    private $debug = false;
+
+    private $cachePath = false;
+
+    public function __construct($basedir, array $modules = array(), $cachePath, $debug = false)
     {
         if (!is_dir($basedir)) {
             throw new \LogicException(sprintf('The ComboLoader basedir "%s" does not exist.', $basedir));
         }
 
-        $this->basedir    = $basedir;
-        $this->collection = new AssetCollection();
+        $this->debug       = $debug;
+        $this->cachePath   = $cachePath;
+        $this->basedir     = $basedir;
+        $this->collection  = new AssetCollection();
 
         foreach ($modules as $module) {
             $ext = pathinfo($module, PATHINFO_EXTENSION);
@@ -80,7 +89,7 @@ class ComboLoader
 
         $path = $this->basedir . '/' . $module;
         if (is_file($path)) {
-            $this->collection->add(new FileAsset($path));
+            $this->collection->add($this->createFileAsset($path));
         }
 
         return $this;
@@ -108,6 +117,19 @@ class ComboLoader
         }
 
         return $this->contentTypes[$this->extension];
+    }
+
+    private function createFileAsset($path, array $filters = array())
+    {
+        $asset = new FileAsset($path, $filters);
+        if ($this->debug === true) {
+            return $asset;
+        }
+
+        return new AssetCache(
+            $asset,
+            new ExpiringCache(new FileSystemCache($this->cachePath), 60 * 60 * 24)
+        );
     }
 
     /**
