@@ -22,6 +22,11 @@ class ComboHandler
         return $this->createResponse();
     }
 
+    public function getLoader()
+    {
+        return $this->loader;
+    }
+
     private function createResponse()
     {
         $response = new Response($this->loader->dump());

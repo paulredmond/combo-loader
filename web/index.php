@@ -1,24 +1,17 @@
 <?php
 
-require_once __DIR__ . "/../vendor/autoload.php";
+$app = require_once __DIR__ . "/../app/config/bootstrap.php";
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Combo\ComboLoader;
-use Combo\ComboHandler;
-
-$app = new Silex\Application();
-
-require_once __DIR__ . "/../app/config/config.php";
 
 $app->get('/combo', function () use ($app) {
-    $handler = new ComboHandler(new ComboLoader(
-        $app['combo.basedir'],
-        explode('&', $app['request']->server->get('QUERY_STRING')),
-        $app['combo.cache.path'],
-        $app['combo.cache.asset_lifetime'],
-        $app['debug']
-    ));
+    /** @var $handler \Combo\ComboHandler */
+    $handler = $app['combo.handler'];
+    $loader  = $handler->getLoader();
+    foreach (explode('&', $app['request']->server->get('QUERY_STRING')) as $module) {
+        $loader->addModule($module);
+    }
 
     return $handler->respond();
 });

@@ -1,17 +1,15 @@
 <?php
 
 $app['debug'] = true;
+// application.php config has a default name. Overwrite if desired.
+// $app['name'] = 'My Super Duper Loader';
 
-// Combo configuration
-$app['combo.basedir']               = __DIR__ . "/../../web/assets";
-$app['combo.response.maxage']       = 31536000; // 1 Year
-$app['combo.cache.path']            = __DIR__ . "/../cache/assetic";
-// This value won't matter much if using HttpCache
-$app['combo.cache.asset_lifetime']  = 60 * 60 * 2; // 2 hours
-
-$app['combo.filters.js'] = array(
-    new Assetic\Filter\CoffeeScriptFilter('/usr/local/share/npm/bin/coffee')
-);
+$app->register(new Combo\ComboServiceProvider(), array(
+    'combo.basedir' => __DIR__ . "/../../web/assets",
+    'combo.maxage'  => 31536000, // 1 Year
+    'combo.cache_path' => __DIR__ . "/../cache/assetic",
+    'combo.asset_lifetime' => 60 * 60 * 2, // 2 Hours
+));
 
 // Http Cache
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
@@ -22,10 +20,10 @@ $app->after(function ($request, $response) use ($app) {
     if ($response->isSuccessful()) {
         $response->setCache(array(
             'public' => true,
-            'max_age' => $app['combo.response.maxage'],
+            'max_age' => $app['combo.maxage'],
         ));
 
-        $response->headers->set('Expires', date('r', strtotime(sprintf("+%s seconds", $app['combo.response.maxage']))));
+        $response->headers->set('Expires', date('r', strtotime(sprintf("+%s seconds", $app['combo.maxage']))));
 
     }
 });
