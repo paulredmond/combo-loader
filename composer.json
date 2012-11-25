@@ -10,6 +10,7 @@
     "require": {
         "silex/silex": "1.0.x-dev",
         "symfony/console": "2.2.x-dev",
+        "symfony/finder": "2.2.x-dev",
         "kriswallsmith/assetic": "v1.0.4"
     },
     "autoload": {

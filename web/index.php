@@ -1,6 +1,6 @@
 <?php
 
-$app = require_once __DIR__ . "/../app/config/bootstrap.php";
+$app = require __DIR__ . "/../app/bootstrap.php";
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
