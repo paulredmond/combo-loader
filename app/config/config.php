@@ -1,6 +1,6 @@
 <?php
 
-$app['debug'] = false;
+$app['debug'] = true;
 // application.php config has a default name. Overwrite if desired.
 // $app['name'] = 'My Super Duper Loader';
 

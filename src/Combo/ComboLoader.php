@@ -57,7 +57,7 @@ class ComboLoader
     public function __construct($basedir, $cachePath, $expires = 0, $debug = false)
     {
         if (!is_dir($basedir)) {
-            throw new \LogicException(sprintf('The ComboLoader basedir "%s" does not exist.', $basedir));
+            throw new Exception\LogicException(sprintf('The ComboLoader basedir "%s" does not exist.', $basedir), $this);
         }
 
         $this->debug       = $debug;

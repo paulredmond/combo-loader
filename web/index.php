@@ -23,11 +23,6 @@ $app->error(function (\Combo\Exception\Exception $e) {
     return $response;
 });
 
-$app->error(function (\InvalidArgumentException $e) {
-    $response = new Response(sprintf('/* %s */', $e->getMessage()), 403);
-
-});
-
 Request::trustProxyData();
 
 if ($app['debug'] === true || !isset($app['http_cache'])) {
