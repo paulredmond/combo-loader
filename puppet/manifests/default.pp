@@ -9,7 +9,7 @@ class basics {
     }
 
     # Basic packages needed.
-    $packages = ["make", "vim", "curl", "git", "ack-grep"]
+    $packages = ["make", "vim", "curl", "git", "ack-grep", 'tig']
     package { $packages:
         ensure => 'installed'
     }
