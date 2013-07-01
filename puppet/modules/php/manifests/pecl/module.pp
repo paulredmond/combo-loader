@@ -49,7 +49,7 @@ define php::pecl::module (
 
   include php
   include php::devel
-
+  include php::pear
   $manage_service_autorestart = $service_autorestart ? {
     true    => $service ? {
       ''      => undef,
