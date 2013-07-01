@@ -54,12 +54,23 @@ class app {
     ]
 
     php::module { $phpModules: }
-    php::module { 'apc':
-        module_prefix => 'php-',
+#    php::module { 'apc':
+#        module_prefix => 'php-',
+#    }
+
+    php::pecl::module { 'mongo':
+        use_package => 'no'
     }
+}
+
+class mongo {
+  class { 'mongodb':
+    use_10gen => true,
+  }
 }
 
 Exec["apt-get update"] -> Package <| |>
 
 include basics
 include app
+include mongo
